@@ -201,15 +201,18 @@ class Client():
                             self.create_and_select_frame(other_user, False)
                             self.joined_channels.append(other_user)
                         target_tab = other_user
-                    if len(msg) == self.otp.n + self.otp.get_key_len(self.otp.MAX_KEYS):
-                        try:
-                            int(msg[:self.otp.get_key_len(self.otp.MAX_KEYS)],16)
-                            msg = self.otp.decode(msg)
-                            self.gui.encode_text.config(state=tk.NORMAL)
-                            self.gui.encode_text.insert(tk.END, "{}: {}\n".format(prefix.split('!')[0], msg))
-                            self.gui.encode_text.config(state=tk.DISABLED)
-                        except ValueError:
-                            print("dunno")
+                    if self.otp == None:
+                        pass
+                    else:
+                        if len(msg) == self.otp.n + self.otp.get_key_len(self.otp.MAX_KEYS):
+                            try:
+                                int(msg[:self.otp.get_key_len(self.otp.MAX_KEYS)],16)
+                                msg = self.otp.decode(msg)
+                                self.gui.encode_text.config(state=tk.NORMAL)
+                                self.gui.encode_text.insert(tk.END, "{}: {}\n".format(prefix.split('!')[0], msg))
+                                self.gui.encode_text.config(state=tk.DISABLED)
+                            except ValueError:
+                                print("dunno")
                     self.print_tab(target_tab, "{}: {}\n", prefix.split("!")[0], args[1].strip('\r\n'))
                 elif command == "JOIN":
                     target_tab = args[0].strip("\r\n")
