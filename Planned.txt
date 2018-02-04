@@ -1,0 +1,6 @@
+Multiprocessing module to generate keys
+Create new screen for novice irc users - Join room, Private, Nick buttons
+Remove alphabet options from otpmod or get it working
+Show currently selected key dictionary in main app screen
+Customisable colors in all screens
+Enable and streamline connections to popular irc networks (freenode etc)
