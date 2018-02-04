@@ -47,6 +47,7 @@ class Client():
         if self._connect:
             self.s.connect((HOST, PORT))
             self.gui.root.title("OTPIRC Client - User: {} - Connected: {}".format(self.NICK, HOST))
+            self.print_tab('Main', "Connected: {}".format(HOST))
             t = threading.Thread(target=self.read_server_msg)
             t.daemon = True
             t.start()
@@ -69,10 +70,11 @@ class Client():
         self.gui.notebook_outputs[tab].see(tk.END)
         self.gui.notebook_outputs[tab].config(state=tk.DISABLED)
 
-    def interpret_user_input(self):
+    def interpret_user_input(self, msg=None):
         send_message = True
         tab = self.gui.notebook.tab(self.gui.notebook.select(), "text")
-        msg = self.gui.input_entrytext.get()
+        if msg == None:
+            msg = self.gui.input_entrytext.get()
         try:
             if tab == "Main" and not msg[0] == "/":
                 if not self.allow_raw_msg:
@@ -140,7 +142,7 @@ class Client():
                                 self.gui.encode_text.config(state=tk.DISABLED)
                         else:
                             send_message = False
-                            self.print_tab(tab, "OTP not configured")
+                            msg = "OTP not configured"
                     if send_message:
                         self.print_tab(tab, "{}: {}\n", self.NICK, msg)
                     else:
@@ -157,8 +159,8 @@ class Client():
             print("IndexError: Can't send 0 length message")
             return("")
 
-    def send_server_msg(self):
-        msg = self.interpret_user_input()
+    def send_server_msg(self, message=None):
+        msg = self.interpret_user_input(message)
         if self._connect:
             self.s.send("{}\r\n".format(msg).encode())
 

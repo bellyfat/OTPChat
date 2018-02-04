@@ -122,6 +122,11 @@ class Gui(tk.Frame):
             self.client.otp_enabled = True
             self.encode_text.grid(row=3, column=0, columnspan=5, sticky=tk.E+tk.W)
 
+    def join_room(self, room=None):
+        if room == None:
+            room = "#OTPDefault"
+        self.client.send_server_msg("/JOIN {}".format(room))
+
     def initialize_otp_config(self):
         self.otp_config_frame = tk.Frame(self)
         self.otp_config_frame.grid_rowconfigure(0, weight=1)
@@ -226,9 +231,11 @@ class Gui(tk.Frame):
         self.notebook_frames['Main'] = tk.Frame(self.notebook)
         self.notebook_frames['Main'].configure(width=80)
         self.notebook_outputs = {}
-        self.notebook_outputs['Main'] = tk.Text(self.notebook_frames['Main'], width=80, height=20)
+        self.notebook_outputs['Main'] = tk.Text(self.notebook_frames['Main'], width=80, height=18)
         self.notebook_outputs['Main'].config(state=tk.DISABLED)
         self.notebook_outputs['Main'].grid(row=0 ,column=0)
+        join_button = tk.Button(self.notebook_frames['Main'], text="Join Default Room", pady=3, command=self.join_room)
+        join_button.grid(row=1, column=0, sticky=tk.N+tk.S)
         self.notebook.add(self.notebook_frames['Main'], text="Main")
         
         otp_config_button = tk.Button(self.app_frame, text="OTP Config", command=self.configure_otp)

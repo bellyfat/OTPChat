@@ -1,6 +1,7 @@
 import _pickle as cPickle
 import string
 import secrets
+import multiprocessing as multi
 
 class OTP():
     defaults_alphabet = string.digits+string.ascii_letters+string.punctuation+" "
@@ -24,7 +25,6 @@ class OTP():
                 self.a = settings[0]
                 self.n = settings[1]
                 self.MAX_KEYS = settings[2]
-                #print("Alpha:{}\nMsgLen:{}\nMaxKeys:{}".format(self.a,self.n,self.MAX_KEYS))
         except FileNotFoundError:
             self.key_gen(outqueue)
         print("keys remaining: {}".format(len(self.key_dict)-1))
@@ -81,3 +81,9 @@ class OTP():
             return(''.join(self.a[(self.a.index(d[i])-self.a.index(k[i]))%len(self.a)] for i in range(self.n)))
         except KeyError:
             return("Unable to decode data")
+
+if __name__ == '__main__':
+    otp = OTP()
+    x = otp.encode("hi")
+    print(x)
+    print(multi.cpu_count())
