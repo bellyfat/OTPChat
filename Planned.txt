@@ -4,3 +4,4 @@ Remove alphabet options from otpmod or get it working
 Show currently selected key dictionary in main app screen
 Customisable colors in all screens
 Enable and streamline connections to popular irc networks (freenode etc)
+Secure data erasure of keys after use

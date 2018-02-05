@@ -137,7 +137,7 @@ class Gui(tk.Frame):
 
         otpoption_label = tk.Label(self.otp_config_frame, text="OTP Options")
         otpoption_label.grid(row=0, column=0, sticky=tk.N+tk.W)
-        availablefiles_label = tk.Label(self.otp_config_frame, text="Available files:")
+        availablefiles_label = tk.Label(self.otp_config_frame, text="Available files (double click to select):")
         availablefiles_label.grid(row=1, column=0, sticky=tk.N+tk.W)
         self.availablefiles_listbox = tk.Listbox(self.otp_config_frame, width=40)
         self.availablefiles_listbox.grid(row=2, column=0, sticky=tk.N+tk.E+tk.S+tk.W)
@@ -147,7 +147,7 @@ class Gui(tk.Frame):
         generation_frame.grid_rowconfigure(0, weight=1)
         self.genoptions_frame = tk.Frame(generation_frame)
         self.genoptions_frame.grid(row=0, column=0, sticky=tk.N+tk.E+tk.S+tk.W)
-        genop_new_label = tk.Label(self.genoptions_frame, text="Generate new OTP key dictionary", pady=20)
+        genop_new_label = tk.Label(self.genoptions_frame, text="Generate new OTP key dictionary\nLeave blank for defaults (recommended)", pady=20)
         genop_new_label.grid(row=0, column=0, columnspan=3, sticky=tk.N)
         genop_alphabet_label = tk.Label(self.genoptions_frame, text="Allowed characters:")
         genop_alphabet_label.grid(row=1, column=0, sticky=tk.W)

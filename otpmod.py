@@ -13,6 +13,8 @@ class OTP():
         self.a = self.defaults_alphabet#alphabet
         self.n = message_length
         self.MAX_KEYS = key_number
+        if key_number < 255:
+            self.MAX_KEYS = 255
         self.file = file
         if not outqueue == None:
             outqueue.put("Starting")
