@@ -1,7 +1,10 @@
 import _pickle as cPickle
 import string
 import secrets
-import multiprocessing as multi
+import hashlib
+import tempfile
+import os
+#import multiprocessing as multi
 
 class OTP():
     defaults_alphabet = string.digits+string.ascii_letters+string.punctuation+" "
@@ -32,7 +35,60 @@ class OTP():
         print("keys remaining: {}".format(len(self.key_dict)-1))
         if not outqueue == None:
             outqueue.put("Stopped")
-            
+        self.checksum = ""
+
+    def check_dict_for_changes(self):
+        BLOCKSIZE = 1088
+        m = hashlib.sha3_256()
+        with open(self.file, "rb") as f:
+            buf = f.read(BLOCKSIZE)
+            m.update(buf)
+            while len(buf) > 0:
+                buf = f.read(BLOCKSIZE)
+                m.update(buf)
+        tmpfile = "{}\\{}".format(tempfile.gettempdir(),self.file)
+        tmphash = ""
+        if os.path.isfile(tmpfile):
+            with open(tmpfile, "rb") as f:
+                tmphash = f.read(256).hex()
+        else:
+            print("warning: No record of key dictionary, creating hash")
+            with open(tmpfile, "wb") as f:
+                f.write(m.digest())
+        if m.hexdigest() == tmphash:
+            print("key dictionary matches hash")
+        else:
+            print("warning: key dictionary does not match hash")
+            print("warning: it may be new or edited")
+
+    def get_my_checksum(self, NICK):
+        BLOCKSIZE = 1088
+        m = hashlib.sha3_256()
+        with open(self.file, "rb") as f:
+            buf = f.read(BLOCKSIZE)
+            m.update(buf)
+            while len(buf) > 0:
+                buf = f.read(BLOCKSIZE)
+                m.update(buf)
+        m.update("{}".format(NICK).encode())
+        self.checksum = m.hexdigest()
+        return(self.checksum)
+
+    def verify_peer_checksum(self, PEER, peer_checksum):
+        BLOCKSIZE = 1088
+        m = hashlib.sha3_256()
+        with open(self.file, "rb") as f:
+            buf = f.read(BLOCKSIZE)
+            m.update(buf)
+            while len(buf) > 0:
+                buf = f.read(BLOCKSIZE)
+                m.update(buf)
+        m.update("{}".format(PEER).encode())
+        checksum = m.hexdigest()
+        print(checksum)
+        print(peer_checksum)
+        return(True if checksum == peer_checksum else False)
+    
     def key_gen(self, outqueue):
         print("Generating new key dictionary with {} keys".format(self.MAX_KEYS))
         print("This may take a few minutes")
@@ -88,4 +144,4 @@ if __name__ == '__main__':
     otp = OTP()
     x = otp.encode("hi")
     print(x)
-    print(multi.cpu_count())
+    print(otp.verify_dict_using_nick("test"))

@@ -56,7 +56,7 @@ class Client():
             self.gui.input_entry.focus_set()
 
     def create_and_select_frame(self, tab, select=False):
-        self.gui.notebook_frames[tab] = tk.Frame(self.gui.notebook)
+        self.gui.notebook_frames[tab] = tk.Frame(self.gui.notebook, bg=self.gui.bg)
         self.gui.notebook_outputs[tab] = tk.Text(self.gui.notebook_frames[tab], width=80, height=20)
         self.gui.notebook_outputs[tab].config(state=tk.DISABLED)
         self.gui.notebook_outputs[tab].grid(row=0, column=0)
